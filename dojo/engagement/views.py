@@ -17,7 +17,7 @@ from django.db import DEFAULT_DB_ALIAS
 from django.db.models import Count, Q
 from django.db.models.query import Prefetch, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, QueryDict, StreamingHttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import Resolver404, reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -84,6 +84,8 @@ from dojo.models import (
     System_Settings,
     Test,
     Test_Import,
+    DLEngagementSync
+
 )
 from dojo.notifications.helper import create_notification
 from dojo.product.queries import get_authorized_products
@@ -1669,3 +1671,15 @@ def excel_export(request):
     )
     response["Content-Disposition"] = "attachment; filename=engagements.xlsx"
     return response
+
+def sync_engagement(request, eid):
+    engagement = get_object_or_404(Engagement, id=eid)
+    # Insert a record into the DLEngagementSync table
+    DLEngagementSync.objects.create(
+        engagementId=engagement.id,
+        status='Requested'
+    )
+    # Add a success message
+    messages.success(request, 'Sync requested')
+    # Redirect back to the engagement view page
+    return redirect('view_engagement', eid=eid)

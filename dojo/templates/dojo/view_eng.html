@@ -47,6 +47,11 @@
                                             </a>
                                         {% endif %}
                                     </li>
+                                    <li>
+                                        <a class="" href="{% url 'sync_engagement' eng.id %}">
+                                            <i class="fa-solid fa-sync"></i> Sync Engagement
+                                        </a>
+                                    </li>
                                 {% endif %}
                                 <li role="presentation">
                                     <a href="{% url 'engagement_report' eng.id %}?title=&active=1&verified=1&false_p=2&duplicate=2">
