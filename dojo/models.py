@@ -4015,6 +4015,16 @@ class JIRA_Issue(models.Model):
         else:
             msg = f"unknown object type while creating JIRA_Issue: {to_str_typed(obj)}"
             raise TypeError(msg)
+        
+
+class DLEngagementSync(models.Model):
+    engagementId = models.IntegerField()
+    status = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.engagementId} - {self.status}"
 
 
 NOTIFICATION_CHOICE_SLACK = ("slack", "slack")
@@ -4593,6 +4603,8 @@ class ChoiceAnswer(Answer):
         if len(self.answer.all()):
             return str(self.answer.all()[0])
         return "No Response"
+    
+
 
 
 if settings.ENABLE_AUDITLOG:

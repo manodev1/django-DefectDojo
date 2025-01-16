@@ -1,0 +1,33 @@
+name: Custom DD Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Verify Docker login
+      run: docker info
+
+    - name: Build and push Docker image
+      run: |
+        chmod +x ./dc-build.sh
+        ./dc-build.sh
+        docker images
+        docker tag defectdojo/defectdojo-nginx:latest ${{ secrets.DOCKER_USERNAME }}/defectdojo-nginx:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/defectdojo-nginx:latest
+        docker tag defectdojo/defectdojo-django:latest ${{ secrets.DOCKER_USERNAME }}/defectdojo-django:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/defectdojo-django:latest
