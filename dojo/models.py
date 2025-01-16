@@ -4018,7 +4018,7 @@ class JIRA_Issue(models.Model):
         
 
 class DLEngagementSync(models.Model):
-    engagementId = models.IntegerField()
+    engagement_id = models.IntegerField()
     status = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
