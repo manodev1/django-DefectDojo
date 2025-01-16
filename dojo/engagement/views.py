@@ -1676,7 +1676,7 @@ def sync_engagement(request, eid):
     engagement = get_object_or_404(Engagement, id=eid)
     # Insert a record into the DLEngagementSync table
     DLEngagementSync.objects.create(
-        engagementId=engagement.id,
+        engagement_id=engagement.id,
         status='Requested'
     )
     # Add a success message
