@@ -1672,14 +1672,20 @@ def excel_export(request):
     response["Content-Disposition"] = "attachment; filename=engagements.xlsx"
     return response
 
+@user_is_authorized(Engagement, Permissions.Engagement_Edit, "eid")
 def sync_engagement(request, eid):
-    engagement = get_object_or_404(Engagement, id=eid)
+    eng = Engagement.objects.get(id=eid)
     # Insert a record into the DLEngagementSync table
     DLEngagementSync.objects.create(
-        engagement_id=engagement.id,
+        engagement_id=eng.id,
         status='Requested'
     )
     # Add a success message
-    messages.success(request, 'Sync requested')
-    # Redirect back to the engagement view page
-    return redirect('view_engagement', eid=eid)
+    messages.success(request, '')
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        "Sync requested. You will be notified on the sync status.",
+        extra_tags="alert-success")
+    return HttpResponseRedirect(reverse("view_engagements", args=(eng.product.id, )))
+  
