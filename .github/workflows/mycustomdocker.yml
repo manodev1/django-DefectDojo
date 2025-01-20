@@ -25,6 +25,7 @@ jobs:
     - name: Build and push Docker image
       run: |
         docker version
+        docker compose version
         chmod +x ./dc-build.sh
         ./dc-build.sh
         docker images
